@@ -9,7 +9,7 @@
 (setq certainty/base-dir (file-name-directory (or (buffer-file-name) load-file-name)))
 (setq certainty/root-dir (concat certainty/base-dir "root/"))
 (setq certainty/vendor-dir (concat certainty/root-dir "vendor/"))
-(setq certainty/active-profile (concat certainty/root-dir "active-profile"))
+(setq certainty/active-profile (concat certainty/root-dir "active-profile/"))
 
 (setq load-path (append load-path (list certainty/base-dir certainty/vendor-dir)))
 
@@ -30,6 +30,7 @@
 
 ;; run the boot sequence
 (when (file-exists-p certainty/active-profile)
+  (setq custom-file (concat certainty/active-profile "custom.el"))
 
   ;; load alpha file that does basic initialization
   (load-if-exists (concat certainty/active-profile "alpha.el"))
@@ -40,6 +41,8 @@
       (when (file-exists-p current-runlevel)
         (dolist (src (directory-files current-runlevel 1 ".*el$"))
     	  (load src)))))
+
+  (load-if-exists custom-file)
 
   ;; lastly load omega to finish things up
   (load-if-exists (concat certainty/active-profile "omega.el")))
