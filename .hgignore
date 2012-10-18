@@ -1,0 +1,19 @@
+syntax: glob
+
+.git
+.svn
+*.o
+*.so
+systems/*
+.dict*
+auto-save-list
+backups
+\#*.*
+session.*
+active-profile
+elpa
+elpa-to-submit
+org-clock-save.el
+vendor
+tramp
+swank
