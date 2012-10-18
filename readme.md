@@ -8,8 +8,8 @@ any other files.
 
 The way i solved it is basically two things:
 
-1) profiles
-2) runlevels
+* profiles
+* runlevels
 
 ## Quickstart
 
