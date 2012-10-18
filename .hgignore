@@ -10,9 +10,8 @@ auto-save-list
 backups
 \#*.*
 session.*
-active-profile
 elpa
-elpa-to-submit
+active-profile
 org-clock-save.el
 vendor
 tramp
