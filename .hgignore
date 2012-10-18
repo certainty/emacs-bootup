@@ -10,9 +10,7 @@ auto-save-list
 backups
 \#*.*
 session.*
-elpa
 active-profile
 org-clock-save.el
-vendor
 tramp
 swank
