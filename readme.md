@@ -50,7 +50,7 @@ In order to activate a profile you need to create  symlink into the root-directo
 #### Alpha and Omega
 
 Each profile may contain an alpha and an omega file. Those are named
-*alpha.el* and *omega.el* and haved to be placed in the profile's root directory.
+*alpha.el* and *omega.el* and have to be placed in the profile's root directory.
 These can be used to do something at the very start or the very end of the boot-process
 accordingly.
 
