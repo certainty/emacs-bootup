@@ -8,7 +8,7 @@
 
 (setq certainty/base-dir (file-name-directory (or (buffer-file-name) load-file-name)))
 (setq certainty/root-dir (concat certainty/base-dir "root/"))
-(setq certainty/vendor-dir (concat certainty/base-dir "vendor/"))
+(setq certainty/vendor-dir (concat certainty/root-dir "vendor/"))
 (setq certainty/active-profile (concat certainty/root-dir "active-profile"))
 
 (setq load-path (append load-path (list certainty/base-dir certainty/vendor-dir)))
