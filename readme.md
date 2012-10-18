@@ -29,14 +29,14 @@ from smallest to greatest. My default there are *three runleveles*.
 
 A profile holds environment specific settings. A profile is represented by a directory that has the following content.
 
- profile-dir
-   |
-   |- alpha.el
-   |- custom.el
-   |- omega.el
-   |- runlevel0
-   |- runlevel1
-   |- runlevel2
+     profile-dir
+       |
+       |- alpha.el
+       |- custom.el
+       |- omega.el
+       |- runlevel0
+       |- runlevel1
+       |- runlevel2
 
 Runlevel0-2 are directories that may hold your elisp files. The rest of the files are used to do pre- and post-actions to the boot-process.
 The custom-file holds custom UX settings.
