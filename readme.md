@@ -17,7 +17,7 @@ Just clone the repository as ${HOME}/.emacs.d. Please be sure to make a backup o
 Once you've done this all you need to do is to create a profile.
 
     mkdir -p ~/.emacs.d/root/profiles/your_profile/runlevel{0,1,2}
-    ln -s ~/.emacs.d/root/profiles/your_profile ~/.emacs.d/root/profiles/active-profile
+    ln -s ~/.emacs.d/root/profiles/your_profile ~/.emacs.d/root/active-profile
 
 Now you can use this setup to place your files in the different runlevels and they will be loaded
 from smallest to greatest. My default there are _three runlevels_.
