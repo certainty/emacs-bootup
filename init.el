@@ -16,12 +16,23 @@
 ;; initialize elpa as this is something we rely on
 (add-to-list 'load-path (concat certainty/base-dir "elpa-to-submit"))
 (setq package-user-dir  (concat certainty/base-dir "elpa"))
+
 (require 'package)
+
 (add-to-list
  'package-archives
  '("marmalade" . "http://marmalade-repo.org/packages/"))
+
+(add-to-list
+ 'package-archives
+ '("melpa" . "http://melpa.milkbox.net/packages/") t)
+
 (package-initialize)
 
+(defun ensure-installed (packages)
+ (dolist (p packages)
+   (when (not (package-installed-p p))
+     (package-install p))))
 
 ;; utilities
 (defun load-if-exists (filename)
