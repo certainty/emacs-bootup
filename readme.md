@@ -13,15 +13,27 @@ The way i solved it is basically two things:
 
 ## Quickstart
 
-Just clone the repository as ${HOME}/.emacs.d. Please be sure to make a backup of your existing directory!
-Once you've done this all you need to do is to create a profile.
+Just clone the repository into your .emacs.d directory. For example you can do this:
 
-    mkdir -p ~/.emacs.d/root/profiles/your_profile/runlevel{0,1,2}
-    ln -s ~/.emacs.d/root/profiles/your_profile ~/.emacs.d/root/active-profile
+    hg clone ssh://hg@bitbucket.org/certainty/emacs-bootup ${HOME}/.emacs.d/bootup
 
-Now you can use this setup to place your files in the different runlevels and they will be loaded
-from smallest to greatest. My default there are _three runlevels_.
+Please be sure to make a backup of your existing directory!
+Once you've done this all you need to do is create the profiles structure like so:
 
+    mkdir -p ~/.emacs.d/profiles/_shared/runlevel{0..2}
+    mkdir -p ~/.emacs.d/profiles/your_profile/runlevel{0..2}
+    mkdir -p ~/.emacs.d/profiles/your_profile/vendor
+    ln -s ~/.emacs.d/profiles/your_profile ~/.emacs.d/profiles/active
+
+The above creates a directory for you profile with the standard runlevels. Also it creates a vendor directory
+inside your profile. Furthermore it create a _shared-profile. This is a convention I use to put configuration
+in there that is shared among different profiles. I simply symlink the files there to my different profiles.
+
+Finally you have to enable bootup by symliking init.el
+
+    ln -s ~/.emacs.d/bootup/init.el ~/.emacs.d/init.el
+
+Now you're set and emacs should load up with the bootup configuration.
 
 ## Details
 
@@ -34,18 +46,19 @@ A profile holds environment specific settings. A profile is represented by a dir
        |- alpha.el
        |- custom.el
        |- omega.el
+       |- vendor
        |- runlevel0
        |- runlevel1
        |- runlevel2
 
 Runlevel0-2 are directories that may hold your elisp files. The rest of the files are used to do pre- and post-actions to the boot-process.
-The custom-file holds custom UX settings.
+The custom-file holds custom settings.
 
 #### Active Profile
 
-In order to activate a profile you need to create  symlink into the root-directory.
+In order to activate a profile you need to create  symlink into the profiles-directory.
 
-    ln -s ~/.emacs.d/root/profiles/my-profile ~/.emacs.d/root/active-profile
+    ln -s ~/.emacs.d/profiles/my-profile ~/.emacs.d/profiles/active
 
 #### Alpha and Omega
 
@@ -55,18 +68,23 @@ These can be used to do something at the very start or the very end of the boot-
 accordingly.
 
 The alpha-file will be loaded before any other file whereas the omega-file is loaded
-after all other files have been loaded. 
+after all other files have been loaded.
 
-### The base profile
+#### The vendor directory
 
-You might have noticed that there is already a folder called base in the profiles directory.
-This is for cased where you have files that you need in all other profiles.
-Just put those files there and *symlink* them into your active-profile
+Each profile may contain a vendor directory where third-party libraries can be installed.
+This directory has already been added to your load-path by bootup.
+
+### The shared profile
+
+You might have noticed in the quickstart, that we created a profile called _shared.
+This is for cases where you have files that you need in all other profiles.
+Just put those files there and *symlink* them into your active-profile.
 
 ### Runlevels
 
 Currently there are three runlevels, which you can use to drive the order of evaluation of your
-configuration files. This is really easy as you just have to place the files that should go before 
+configuration files. This is really easy as you just have to place the files that should go before
 other files in the runlevel that goes before the other.
 
 ## Boot-Process
@@ -82,11 +100,11 @@ The bootprocess is as follows:
 
 The following bindings are available and can be used by your elisp files:
 
-* certainty/available-runlevels - The number of available runlevels (default 3)
-* certainty/base-dir - The path to your ~/.emacs.d
-* certainty/root-dir - The path to ~/.emacs.d/root
-* certainty/active-profile - The path to the currently active-profile
-* certainty/vendor-dir - The path to your vendor directory
+* bootup/ensure-installed - function to make sure elpa packages are installed
+* bootup/load-if-exits - function that will load the given file only if it exists
+* bootup/available-runlevels - The number of available runlevels (default 3)
+* bootup/base-dir - The path to your ~/.emacs.d
+* bootup/profiles-dir - The path to ~/.emacs.d/profiles
+* bootup/active-profile - The path to the currently active-profile
+* bootup/vendor-dir - The path to your vendor directory
 * custom-file - The path to the custom file
-
-
