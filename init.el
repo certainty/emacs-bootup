@@ -4,18 +4,20 @@
 (require 'ansi-color)
 (require 'recentf)
 
-(setq certainty/available-runlevels 3)
 
-(setq certainty/base-dir (file-name-directory (or (buffer-file-name) load-file-name)))
-(setq certainty/root-dir (concat certainty/base-dir "root/"))
-(setq certainty/vendor-dir (concat certainty/root-dir "vendor/"))
-(setq certainty/active-profile (concat certainty/root-dir "active-profile/"))
+(setq bootup/available-runlevels 3)
 
-(setq load-path (append load-path (list certainty/base-dir certainty/vendor-dir)))
+(setq bootup/base-dir   (file-name-directory (or (buffer-file-name) load-file-name)))
 
-;; initialize elpa as this is something we rely on
-(add-to-list 'load-path (concat certainty/base-dir "elpa-to-submit"))
-(setq package-user-dir  (concat certainty/base-dir "elpa"))
+(setq bootup/profiles-dir   (concat bootup/base-dir "profiles/"))
+(setq bootup/vendor-dir     nil)
+(setq bootup/active-profile (concat bootup/profiles-dir "active/"))
+
+(add-to-list 'load-path bootup/base-dir)
+
+(add-to-list 'load-path (concat bootup/base-dir "elpa-to-submit"))
+
+(setq package-user-dir  (concat bootup/base-dir "elpa"))
 
 (require 'package)
 
@@ -26,34 +28,38 @@
 (add-to-list
  'package-archives
  '("melpa" . "http://melpa.milkbox.net/packages/") t)
-
 (package-initialize)
 
-(defun ensure-installed (packages)
+;; utilities
+(defun bootup/load-if-exists (filename)
+ (if (file-exists-p filename)
+  (load filename)))
+
+(defun bootup/ensure-installed (packages)
  (dolist (p packages)
    (when (not (package-installed-p p))
      (package-install p))))
 
-;; utilities
-(defun load-if-exists (filename)
- (if (file-exists-p filename)
-  (load filename)))
-
 ;; run the boot sequence
-(when (file-exists-p certainty/active-profile)
-  (setq custom-file (concat certainty/active-profile "custom.el"))
+(when (file-exists-p bootup/active-profile)
+  (setq bootup/vendor-dir (concat bootup/active-profile "vendor/"))
+  (add-to-list 'load-path bootup/vendor-dir)
+
+  (setq custom-file (concat bootup/active-profile "custom.el"))
 
   ;; load alpha file that does basic initialization
-  (load-if-exists (concat certainty/active-profile "alpha.el"))
+  (bootup/load-if-exists (concat bootup/active-profile "alpha.el"))
 
   ;; load all runlevels in order in active profile
-  (dotimes (number (+ 1 certainty/available-runlevels) nil)
-    (let ((current-runlevel (format "%s/runlevel%d" certainty/active-profile number)))
+  (dotimes (number (+ 1 bootup/available-runlevels) nil)
+    (let ((current-runlevel (format "%s/runlevel%d" bootup/active-profile number)))
       (when (file-exists-p current-runlevel)
         (dolist (src (directory-files current-runlevel 1 ".*el$"))
     	  (load src)))))
 
-  (load-if-exists custom-file)
+  (bootup/load-if-exists custom-file)
 
   ;; lastly load omega to finish things up
-  (load-if-exists (concat certainty/active-profile "omega.el")))
+  (bootup/load-if-exists (concat bootup/active-profile "omega.el")))
+
+(put 'erase-buffer 'disabled nil)
